@@ -33,18 +33,15 @@
 #include "scan_dialog.h"
 #include "setting.h"
 
-/* TODO: Use G_DEFINE_TYPE_WITH_PRIVATE. */
-G_DEFINE_TYPE (EtPlaylistDialog, et_playlist_dialog, GTK_TYPE_DIALOG)
-
-#define et_playlist_dialog_get_instance_private(dialog) (dialog->priv)
-
-static const guint BOX_SPACING = 6;
-
-struct _EtPlaylistDialogPrivate
+typedef struct
 {
     GtkWidget *name_mask_entry;
     GtkWidget *content_mask_entry;
-};
+} EtPlaylistDialogPrivate;
+
+G_DEFINE_TYPE_WITH_PRIVATE (EtPlaylistDialog, et_playlist_dialog, GTK_TYPE_DIALOG)
+
+static const guint BOX_SPACING = 6;
 
 /*
  * Function to replace UNIX ForwardSlash with a DOS BackSlash
@@ -775,26 +772,14 @@ create_playlist_dialog (EtPlaylistDialog *self)
 }
 
 static void
-et_playlist_dialog_finalize (GObject *object)
-{
-    G_OBJECT_CLASS (et_playlist_dialog_parent_class)->finalize (object);
-}
-
-static void
 et_playlist_dialog_init (EtPlaylistDialog *self)
 {
-    self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, ET_TYPE_PLAYLIST_DIALOG,
-                                              EtPlaylistDialogPrivate);
-
     create_playlist_dialog (self);
 }
 
 static void
 et_playlist_dialog_class_init (EtPlaylistDialogClass *klass)
 {
-    G_OBJECT_CLASS (klass)->finalize = et_playlist_dialog_finalize;
-
-    g_type_class_add_private (klass, sizeof (EtPlaylistDialogPrivate));
 }
 
 /*
