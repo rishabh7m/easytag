@@ -804,6 +804,7 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
     }
 
     // Convert filename to file-system encoding
+    /* FIXME: Use g_filename_from_utf8(). */
     filename_generated = filename_from_display(filename_generated_utf8);
     if (!filename_generated)
     {

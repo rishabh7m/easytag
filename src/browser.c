@@ -585,6 +585,7 @@ Browser_Entry_Activated (EtBrowser *self, GtkEntry *entry)
     path_utf8 = gtk_entry_get_text (entry);
     Add_String_To_Combo_List (GTK_LIST_STORE (priv->entry_model), path_utf8);
 
+    /* FIXME: Use g_filename_from_utf8(). */
     path = filename_from_display(path_utf8);
 
     et_browser_select_dir (self, path);
@@ -3163,6 +3164,7 @@ et_browser_reload (EtBrowser *self)
         if (priv->current_path != NULL)
             current_path = g_strdup(priv->current_path);
         else if (g_utf8_strlen(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->entry_combo)))), -1) > 0)
+            /* FIXME: Use g_filename_from_utf8(). */
             current_path = filename_from_display(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->entry_combo)))));
         else
         {
@@ -4365,6 +4367,7 @@ Rename_Directory (EtBrowser *self)
     }
 
     /* Check that we can write the new directory name */
+    /* FIXME: Use g_filename_from_utf8(). */
     directory_new_name_file = filename_from_display(directory_new_name);
     if (!directory_new_name_file)
     {

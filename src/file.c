@@ -1160,6 +1160,7 @@ ET_Set_Filename_File_Name_Item (File_Name *FileName,
     }else if (filename_utf8)
     {
         FileName->value_utf8 = g_strdup(filename_utf8);
+        /* FIXME: Use g_filename_from_utf8(). */
         FileName->value      = filename_from_display(filename_utf8);
         FileName->value_ck   = g_utf8_collate_key_for_filename(FileName->value_utf8, -1);
     }else if (filename)
@@ -1486,6 +1487,7 @@ ET_Save_File_Name_From_UI (const ET_File *ETFile, File_Name *FileName)
     g_return_val_if_fail (ETFile != NULL && FileName != NULL, FALSE);
 
     filename_utf8 = et_application_window_file_area_get_filename (ET_APPLICATION_WINDOW (MainWindow));
+    /* FIXME: Use g_filename_from_utf8(). */
     filename = filename_from_display (filename_utf8);
 
     if (!filename)

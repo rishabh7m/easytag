@@ -196,11 +196,13 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
                     case ET_PLAYLIST_CONTENT_EXTENDED_MASK:
                     {
                         /* Header uses information generated from a mask. */
+                        /* FIXME: Use g_filename_from_utf8(). */
                         gchar *mask = filename_from_display (gtk_entry_get_text (GTK_ENTRY (priv->content_mask_entry)));
                         /* Special case: do not replace illegal characters and
                          * do not check if there is a directory separator in
                          * the mask. */
                         gchar *filename_generated_utf8 = et_scan_generate_new_filename_from_mask (etfile, mask, TRUE);
+                        /* FIXME: Use g_filename_from_utf8(). */
                         gchar *filename_generated = filename_from_display (filename_generated_utf8);
 
                         to_write = g_string_new ("#EXTINF:");
@@ -320,11 +322,13 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
                 case ET_PLAYLIST_CONTENT_EXTENDED_MASK:
                 {
                     /* Header uses information generated from a mask. */
+                    /* FIXME: Use g_filename_from_utf8(). */
                     gchar *mask = filename_from_display (gtk_entry_get_text (GTK_ENTRY (priv->content_mask_entry)));
                     /* Special case: do not replace illegal characters and
                      * do not check if there is a directory separator in
                      * the mask. */
                     gchar *filename_generated_utf8 = et_scan_generate_new_filename_from_mask (etfile, mask, TRUE);
+                    /* FIXME: Use g_filename_from_utf8(). */
                     gchar *filename_generated = filename_from_display (filename_generated_utf8);
 
                     to_write = g_string_new ("#EXTINF:");
@@ -450,6 +454,7 @@ write_button_clicked (EtPlaylistDialog *self)
                                                "playlist-filename-mask");
 
         /* Generate filename from tag of the current selected file (FIXME). */
+        /* FIXME: Use g_filename_from_utf8(). */
         temp = filename_from_display (playlist_name);
         g_free (playlist_name);
         playlist_basename_utf8 = et_scan_generate_new_filename_from_mask (ETCore->ETFileDisplayed,
@@ -525,6 +530,7 @@ write_button_clicked (EtPlaylistDialog *self)
     g_free(playlist_path_utf8);
     g_free(playlist_basename_utf8);
 
+    /* FIXME: Use g_filename_from_utf8(). */
     playlist_name = filename_from_display(playlist_name_utf8);
 
     {
