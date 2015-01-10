@@ -1164,7 +1164,7 @@ ET_Set_Filename_File_Name_Item (File_Name *FileName,
         FileName->value_ck   = g_utf8_collate_key_for_filename(FileName->value_utf8, -1);
     }else if (filename)
     {
-        FileName->value_utf8 = filename_to_display(filename);;
+        FileName->value_utf8 = g_filename_display_name (filename);;
         FileName->value      = g_strdup(filename);
         FileName->value_ck   = g_utf8_collate_key_for_filename(FileName->value_utf8, -1);
     }else
@@ -1548,7 +1548,7 @@ ET_Save_File_Name_From_UI (const ET_File *ETFile, File_Name *FileName)
     /* Set the new filename (in file system encoding). */
     FileName->value = g_strconcat(dirname,G_DIR_SEPARATOR_S,filename_new,NULL);
     /* Set the new filename (in UTF-8 encoding). */
-    FileName->value_utf8 = filename_to_display(FileName->value);
+    FileName->value_utf8 = g_filename_display_name (FileName->value);
     // Calculates collate key
     FileName->value_ck = g_utf8_collate_key_for_filename(FileName->value_utf8, -1);
 
@@ -1604,7 +1604,7 @@ ET_Save_File_Name_Internal (const ET_File *ETFile,
         /* Set the new filename (in file system encoding). */
         FileName->value = g_strconcat(dirname,G_DIR_SEPARATOR_S,filename_new,NULL);
         /* Set the new filename (in UTF-8 encoding). */
-        FileName->value_utf8 = filename_to_display(FileName->value);
+        FileName->value_utf8 = g_filename_display_name (FileName->value);
         // Calculate collate key
         FileName->value_ck = g_utf8_collate_key_for_filename(FileName->value_utf8, -1);
 

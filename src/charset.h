@@ -33,7 +33,6 @@ gchar *convert_string_1 (const gchar *string, gssize length, const gchar *from_c
 /* Used for Ogg Vorbis and FLAC tags */
 gchar *convert_to_utf8   (const gchar *string);
 
-gchar *filename_to_display   (const gchar *string);
 gchar *filename_from_display (const gchar *string);
 
 gchar *Try_To_Validate_Utf8_String (const gchar *string);

@@ -199,24 +199,17 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     if (et_id3tag_check_if_file_is_corrupted (file, error))
     {
         GtkWidget *msgdialog;
-        gchar *basename;
-        gchar *utf8_basename;
-
-        basename = g_file_get_basename (file);
-        utf8_basename = filename_to_display (basename);
 
         msgdialog = gtk_message_dialog_new (GTK_WINDOW (MainWindow),
                                             GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                             GTK_MESSAGE_ERROR,
                                             GTK_BUTTONS_CLOSE,
                                             _("As the following corrupted file ‘%s’ will cause an error in id3lib, it will not be processed"),
-                                            utf8_basename);
+                                            filename_utf8);
         gtk_window_set_title (GTK_WINDOW (msgdialog), _("Corrupted file"));
 
         gtk_dialog_run (GTK_DIALOG (msgdialog));
         gtk_widget_destroy (msgdialog);
-        g_free (basename);
-        g_free (utf8_basename);
         g_object_unref (file);
         return FALSE;
     }
@@ -1044,14 +1037,15 @@ gchar *Id3tag_Get_Field (const ID3Frame *id3_frame, ID3_FieldID id3_fieldid)
     //g_print(">>ID:%d >'%s' (string1:'%s') (num_chars:%d)\n",ID3Field_GetINT(id3_field_encoding),string,string1,num_chars);
 
 out:
-    // In case the conversion fails, try 'filename_to_display' character fix...
+    /* In case the conversion fails, try character fix. */
     if (num_chars && !string1)
     {
         gchar *escaped_str = g_strescape(string, NULL);
         g_debug ("Id3tag_Get_Field: Trying to fix string '%s'…", escaped_str);
         g_free(escaped_str);
 
-        string1 = filename_to_display(string);
+        /* FIXME: Use g_filename_from_utf8()? */
+        string1 = g_filename_display_name (string);
 
         /* TODO: Set a GError instead. */
         if (!string1)

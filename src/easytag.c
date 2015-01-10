@@ -952,21 +952,21 @@ Read_Directory (const gchar *path_real)
     {
         // Message if the directory doesn't exist...
         GtkWidget *msgdialog;
-        gchar *path_utf8 = filename_to_display(path_real);
+        gchar *display_path = g_filename_display_name (path_real);
 
         msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
                                            GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                            GTK_MESSAGE_ERROR,
                                            GTK_BUTTONS_CLOSE,
                                            _("Cannot read directory ‘%s’"),
-                                           path_utf8);
+                                           display_path);
         gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (msgdialog),
                                                   "%s", error->message);
         gtk_window_set_title(GTK_WINDOW(msgdialog),_("Directory Read Error"));
 
         gtk_dialog_run(GTK_DIALOG(msgdialog));
         gtk_widget_destroy(msgdialog);
-        g_free(path_utf8);
+        g_free (display_path);
 
         ReadingDirectory = FALSE; //Allow a new reading
         et_application_window_browser_set_sensitive (window, TRUE);
@@ -1005,12 +1005,12 @@ Read_Directory (const gchar *path_real)
          l = g_list_next (l))
     {
         gchar *filename_real = l->data; /* Contains real filenames. */
-        gchar *filename_utf8 = filename_to_display(filename_real);
+        gchar *display_path = g_filename_display_name (filename_real);
 
-        msg = g_strdup_printf (_("File: ‘%s’"), filename_utf8);
+        msg = g_strdup_printf (_("File: ‘%s’"), display_path);
         et_application_window_status_bar_message (window, msg, FALSE);
         g_free(msg);
-        g_free(filename_utf8);
+        g_free (display_path);
 
         /* Warning: Do not free filename_real because ET_Add_File.. uses it for
          * internal structures. */

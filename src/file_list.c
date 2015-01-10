@@ -205,7 +205,7 @@ et_file_list_add (GList *file_list,
     guint         undo_key;
     GFile *file;
     GFileInfo *fileinfo;
-    gchar        *filename_utf8 = filename_to_display(filename);
+    gchar *display_path = g_filename_display_name (filename);
     const gchar  *locale_lc_ctype = getenv("LC_CTYPE");
     GError *error = NULL;
     gboolean success;
@@ -227,8 +227,8 @@ et_file_list_add (GList *file_list,
     FileName = ET_File_Name_Item_New();
     FileName->saved      = TRUE;    /* The file hasn't been changed, so it's saved */
     FileName->value      = filename;
-    FileName->value_utf8 = filename_utf8;
-    FileName->value_ck   = g_utf8_collate_key_for_filename(filename_utf8, -1);
+    FileName->value_utf8 = display_path;
+    FileName->value_ck   = g_utf8_collate_key_for_filename (display_path, -1);
 
     /* Fill the File_Tag structure for FileTagList */
     FileTag = et_file_tag_new ();
@@ -248,7 +248,7 @@ et_file_list_add (GList *file_list,
             {
                 Log_Print (LOG_ERROR,
                            "Error reading ID3 tag from file ‘%s’: %s",
-                           filename_utf8, error->message);
+                           display_path, error->message);
                 g_clear_error (&error);
             }
             break;
@@ -259,7 +259,7 @@ et_file_list_add (GList *file_list,
             {
                 Log_Print (LOG_ERROR,
                            _("Error reading tag from Ogg file ‘%s’: %s"),
-                           filename_utf8, error->message);
+                           display_path, error->message);
                 g_clear_error (&error);
             }
             break;
@@ -270,7 +270,7 @@ et_file_list_add (GList *file_list,
             {
                 Log_Print (LOG_ERROR,
                            _("Error reading tag from FLAC file ‘%s’: %s"),
-                           filename_utf8, error->message);
+                           display_path, error->message);
                 g_clear_error (&error);
             }
             break;
@@ -280,7 +280,7 @@ et_file_list_add (GList *file_list,
             {
                 Log_Print (LOG_ERROR,
                            _("Error reading APE tag from file ‘%s’: %s"),
-                           filename_utf8, error->message);
+                           display_path, error->message);
                 g_clear_error (&error);
             }
             break;
@@ -290,7 +290,7 @@ et_file_list_add (GList *file_list,
             {
                 Log_Print (LOG_ERROR,
                            _("Error reading tag from MP4 file ‘%s’: %s"),
-                           filename_utf8, error->message);
+                           display_path, error->message);
                 g_clear_error (&error);
             }
             break;
@@ -301,7 +301,7 @@ et_file_list_add (GList *file_list,
             {
                 Log_Print (LOG_ERROR,
                            _("Error reading tag from WavPack file ‘%s’: %s"),
-                           filename_utf8, error->message);
+                           display_path, error->message);
                 g_clear_error (&error);
             }
         break;
@@ -312,7 +312,7 @@ et_file_list_add (GList *file_list,
             {
                 Log_Print (LOG_ERROR,
                            _("Error reading tag from Opus file ‘%s’: %s"),
-                           filename_utf8, error->message);
+                           display_path, error->message);
                 g_clear_error (&error);
             }
             break;
@@ -322,7 +322,7 @@ et_file_list_add (GList *file_list,
             /* FIXME: Translatable string. */
             Log_Print (LOG_ERROR,
                        "FileTag: Undefined tag type (%d) for file %s",
-                       (gint)description->TagType, filename_utf8);
+                       (gint)description->TagType, display_path);
             break;
     }
 
@@ -330,7 +330,7 @@ et_file_list_add (GList *file_list,
     {
         Log_Print (LOG_WARNING,
                    _("The year value ‘%s’ seems to be invalid in file ‘%s’. The information will be lost when saving"),
-                   FileTag->year, filename_utf8);
+                   FileTag->year, display_path);
     }
 
     /* Fill the ET_File_Info structure */
@@ -388,7 +388,7 @@ et_file_list_add (GList *file_list,
             /* FIXME: Translatable string. */
             Log_Print (LOG_ERROR,
                        "ETFileInfo: Undefined file type (%d) for file %s",
-                       (gint)description->FileType, filename_utf8);
+                       (gint)description->FileType, display_path);
             /* To get at least the file size. */
             success = et_core_read_file_info (file, ETFileInfo, &error);
             break;
@@ -398,7 +398,7 @@ et_file_list_add (GList *file_list,
     {
         Log_Print (LOG_ERROR,
                    _("Error while querying information for file ‘%s’: %s"),
-                   filename_utf8, error->message);
+                   display_path, error->message);
         g_error_free (error);
     }
 
@@ -468,7 +468,7 @@ et_file_list_add (GList *file_list,
     if ( (FileName && FileName->saved==FALSE) || (FileTag && FileTag->saved==FALSE) )
     {
         Log_Print (LOG_INFO, _("Automatic corrections applied for file ‘%s’"),
-                   filename_utf8);
+                   display_path);
     }
 
     /* Add the item to the ArtistAlbum list (placed here to take advantage of previous changes) */
@@ -1227,7 +1227,7 @@ et_file_list_update_directory_name (GList *file_list,
                         FileName->value = filename_tmp;
                         /* Replace the filename (in file system encoding). */
                         g_free (FileName->value_utf8);
-                        FileName->value_utf8 = filename_to_display (FileName->value);
+                        FileName->value_utf8 = g_filename_display_name (FileName->value);
                         /* Recalculate the collate key. */
                         g_free (FileName->value_ck);
                         FileName->value_ck = g_utf8_collate_key_for_filename (FileName->value_utf8, -1);
